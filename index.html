@@ -123,8 +123,7 @@ var script = document.createElement('script');
 script.src = 'https://api.github.com?callback=foo';
 
 document.getElementsByTagName('head')[0].appendChild(script);
-</script>
-		<script>
+
 		    if ('serviceWorker' in navigator) {
 		        navigator.serviceWorker.register('./service-worker.js').then((registration) => {
 		            console.log('Service Worker registered with scope:', registration.scope);
