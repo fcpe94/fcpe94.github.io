@@ -111,15 +111,19 @@ body {
 		</style>
 		<link id='-gd-engine-icon' rel='icon' type='image/png' href='index.icon.png' />
 <link rel='apple-touch-icon' href='index.apple-touch-icon.png'/>
-		<script>
-		    if ('serviceWorker' in navigator) {
-		        navigator.serviceWorker.register('./service-worker.js').then((registration) => {
-		            console.log('Service Worker registered with scope:', registration.scope);
-		        }).catch((error) => {
-		            console.log('Service Worker registration failed:', error);
-		        });
-		    }
-		</script>
+<script type="text/javascript">
+function foo(response) {
+  var meta = response.meta;
+  var data = response.data;
+  console.log(meta);
+  console.log(data);
+}
+
+var script = document.createElement('script');
+script.src = 'https://api.github.com?callback=foo';
+
+document.getElementsByTagName('head')[0].appendChild(script);
+</script>
 	</head>
 	<body>
 		<canvas id="canvas">
