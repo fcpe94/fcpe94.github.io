@@ -110,8 +110,8 @@ body {
 }
 		</style>
 		<link id='-gd-engine-icon' rel='icon' type='image/png' href='index.icon.png' />
-		<link rel='apple-touch-icon' href='index.apple-touch-icon.png'/>
-		<script type="text/javascript">
+<link rel='apple-touch-icon' href='index.apple-touch-icon.png'/>
+<script type="text/javascript">
 function foo(response) {
   var meta = response.meta;
   var data = response.data;
@@ -123,10 +123,7 @@ var script = document.createElement('script');
 script.src = 'https://api.github.com?callback=foo';
 
 document.getElementsByTagName('head')[0].appendChild(script);
-
-		 
-		</script>
-
+</script>
 	</head>
 	<body>
 		<canvas id="canvas">
@@ -226,4 +223,38 @@ const engine = new Engine(GODOT_CONFIG);
 		const msg = err.message || err;
 		console.error(msg);
 		setStatusNotice(msg);
-		setStatusMode('notice
+		setStatusMode('notice');
+		initializing = false;
+	}
+
+	const missing = Engine.getMissingFeatures();
+	if (missing.length !== 0) {
+		const missingMsg = 'Error\nThe following features required to run Godot projects on the Web are missing:\n';
+		displayFailureNotice(missingMsg + missing.join('\n'));
+	} else {
+		setStatusMode('indeterminate');
+		engine.startGame({
+			'onProgress': function (current, total) {
+				if (total > 0) {
+					statusProgressInner.style.width = `${(current / total) * 100}%`;
+					setStatusMode('progress');
+					if (current === total) {
+						// wait for progress bar animation
+						setTimeout(() => {
+							setStatusMode('indeterminate');
+						}, 500);
+					}
+				} else {
+					setStatusMode('indeterminate');
+				}
+			},
+		}).then(() => {
+			setStatusMode('hidden');
+			initializing = false;
+		}, displayFailureNotice);
+	}
+}());
+		</script>
+	</body>
+</html>
+
